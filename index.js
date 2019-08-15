@@ -1,19 +1,20 @@
 /**
  * @format
  */
-
-import { Navigation } from 'react-native-navigation';
-import App from './App';
+import './src/index';
+// require('./src/index');
+// import { Navigation } from 'react-native-navigation';
+// import App from './src/App';
 
 // AppRegistry.registerComponent(appName, () => App);
-Navigation.registerComponent('navigation.playground.WelcomeScreen', () => App);
+// Navigation.registerComponent('bookshift.App', () => App);
 
-Navigation.events().registerAppLaunchedListener(() => {
-  Navigation.setRoot({
-    root: {
-      component: {
-        name: 'navigation.playground.WelcomeScreen'
-      }
-    }
-  });
-});
+// Navigation.events().registerAppLaunchedListener(() => {
+//   Navigation.setRoot({
+//     root: {
+//       component: {
+//         name: 'bookshift.App'
+//       }
+//     }
+//   });
+// });
