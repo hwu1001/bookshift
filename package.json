@@ -5,11 +5,13 @@
   "scripts": {
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "android": "(echo 'needed for rnn' && cd ./android && ./gradlew app:assembleDebug && ./gradlew installDebug)"
   },
   "dependencies": {
     "react": "16.8.6",
-    "react-native": "0.60.5"
+    "react-native": "0.60.5",
+    "react-native-navigation": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
