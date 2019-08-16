@@ -7,45 +7,59 @@
  *
  * @format
  */
-
+import { Platform } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { registerScreens, Screens } from './screens';
 
 const main = () => {
+  // Icons are required on Android because of the Android library React Native Navigation
+  // uses. They are not required on iOS.
+  // See: https://github.com/wix/react-native-navigation/issues/4684
+  const icon = Platform.select({
+    ios: undefined,
+    android: require('./file.svg') // This doesn't render on the screen, which is what the spec wants
+  });
   registerScreens();
   Navigation.events().registerAppLaunchedListener(() => {
+    Navigation.setDefaultOptions({
+      statusBar: {
+        style: 'dark'
+      },
+      layout: {
+        direction: 'ltr'
+      },
+      bottomTabs: {
+        titleDisplayMode: 'alwaysShow'
+      },
+      bottomTab: {
+        textColor: '#CBD2E1',
+        selectedTextColor: '#004FB4',
+        fontSize: 18,
+        selectedFontSize: 18,
+      }
+    });
     Navigation.setRoot({
       root: {
         bottomTabs: {
           children: [
             {
-              stack: {
-                children: [
-                  {
-                    component: {
-                      name: Screens.MyShifts
-                    }
-                  }
-                ],
+              component: {
+                name: Screens.MyShifts,
                 options: {
                   bottomTab: {
-                    text: 'My Shifts'
+                    text: 'My Shifts',
+                    icon: icon
                   }
                 }
               }
             },
             {
-              stack: {
-                children: [
-                  {
-                    component: {
-                      name: Screens.AvailableShifts
-                    }
-                  }
-                ],
+              component: {
+                name: Screens.AvailableShifts,
                 options: {
                   bottomTab: {
-                    text: 'Available Shifts'
+                    text: 'Available Shifts',
+                    icon: icon
                   }
                 }
               }
