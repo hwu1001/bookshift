@@ -36,7 +36,7 @@ const main = () => {
         selectedTextColor: '#004FB4',
         fontSize: 18,
         selectedFontSize: 18,
-        fontFamily: 'Inter-Medium'
+        fontFamily: 'Inter-SemiBold'
       }
     });
     Navigation.setRoot({
