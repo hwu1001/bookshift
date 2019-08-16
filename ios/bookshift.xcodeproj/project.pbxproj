@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* bookshiftTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* bookshiftTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -20,6 +19,9 @@
 		DF6AFBD086F97D84FA692901 /* libPods-bookshift-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1358FFDECD209B7BDA738B15 /* libPods-bookshift-tvOS.a */; };
 		E62993040E8C728569629D30 /* libPods-bookshiftTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A57E8C43B620CFE932E65031 /* libPods-bookshiftTests.a */; };
 		F46323A013CE63A72B26FA17 /* libPods-bookshift-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 518C01A71E81A27242E37F40 /* libPods-bookshift-tvOSTests.a */; };
+		6CC1D749CCBB4BCDB78D8BC4 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E911BA6E9D3D4EB7B4123945 /* Inter-Bold.ttf */; };
+		981E4B4F4E184521935F3FEE /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7BC39A3F6A45462D9A845B58 /* Inter-Regular.ttf */; };
+		24269174CABA470ABE747F62 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 91165A531B784C76B4874E3F /* Inter-Medium.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,9 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		EF2FDB9D6FBF2898DB060CD5 /* Pods-bookshift-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bookshift-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-bookshift-tvOSTests/Pods-bookshift-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E911BA6E9D3D4EB7B4123945 /* Inter-Bold.ttf */ = {isa = PBXFileReference; name = "Inter-Bold.ttf"; path = "../src/assets/fonts/Inter-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7BC39A3F6A45462D9A845B58 /* Inter-Regular.ttf */ = {isa = PBXFileReference; name = "Inter-Regular.ttf"; path = "../src/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		91165A531B784C76B4874E3F /* Inter-Medium.ttf */ = {isa = PBXFileReference; name = "Inter-Medium.ttf"; path = "../src/assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +186,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				1BD1F4E5C5BCFEA29C4D64F0 /* Pods */,
+				3DD36917B03947A4BA562022 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -197,6 +203,17 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		3DD36917B03947A4BA562022 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				E911BA6E9D3D4EB7B4123945 /* Inter-Bold.ttf */,
+				7BC39A3F6A45462D9A845B58 /* Inter-Regular.ttf */,
+				91165A531B784C76B4874E3F /* Inter-Medium.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -285,7 +302,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 940;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -338,6 +355,9 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				6CC1D749CCBB4BCDB78D8BC4 /* Inter-Bold.ttf in Resources */,
+				981E4B4F4E184521935F3FEE /* Inter-Regular.ttf in Resources */,
+				24269174CABA470ABE747F62 /* Inter-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
