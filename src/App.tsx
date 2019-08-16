@@ -36,6 +36,7 @@ const main = () => {
         selectedTextColor: '#004FB4',
         fontSize: 18,
         selectedFontSize: 18,
+        fontFamily: 'Inter-Medium'
       }
     });
     Navigation.setRoot({
@@ -47,7 +48,7 @@ const main = () => {
                 name: Screens.MyShifts,
                 options: {
                   bottomTab: {
-                    text: 'My Shifts',
+                    text: 'My shifts',
                     icon: icon
                   }
                 }
@@ -58,7 +59,7 @@ const main = () => {
                 name: Screens.AvailableShifts,
                 options: {
                   bottomTab: {
-                    text: 'Available Shifts',
+                    text: 'Available shifts',
                     icon: icon
                   }
                 }
