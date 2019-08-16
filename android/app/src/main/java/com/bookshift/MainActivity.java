@@ -1,6 +1,10 @@
 package com.bookshift;
 
-import com.facebook.react.ReactActivity;
+import android.os.Bundle;
+import androidx.annotation.Nullable;
+import android.widget.ImageView;
+
+// import com.facebook.react.ReactActivity;
 import com.reactnativenavigation.NavigationActivity;
 
 public class MainActivity extends NavigationActivity {
@@ -13,4 +17,15 @@ public class MainActivity extends NavigationActivity {
     // protected String getMainComponentName() {
     //     return "bookshift";
     // }
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setSplashLayout();
+    }
+
+    private void setSplashLayout() {
+        ImageView img = new ImageView(this);
+        img.setImageDrawable(getDrawable(R.drawable.ic_android));
+        setContentView(img);
+    }
 }

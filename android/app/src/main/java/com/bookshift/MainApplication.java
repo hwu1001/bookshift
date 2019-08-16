@@ -11,6 +11,8 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 
+import androidx.annotation.Nullable;
+
 import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.NavigationReactNativeHost;
 import com.reactnativenavigation.react.ReactGateway;
