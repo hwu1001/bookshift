@@ -16,8 +16,7 @@ const main = () => {
   // uses. They are not required on iOS.
   // See: https://github.com/wix/react-native-navigation/issues/4684
   const icon = Platform.select({
-    ios: undefined,
-    android: require('./file.svg') // This doesn't render on the screen, which is what the spec wants
+    android: require('./assets/img/file.svg') // This doesn't render on the screen, which is what the spec wants
   });
   registerScreens();
   Navigation.events().registerAppLaunchedListener(() => {
@@ -34,8 +33,8 @@ const main = () => {
       bottomTab: {
         textColor: '#CBD2E1',
         selectedTextColor: '#004FB4',
-        fontSize: 18,
-        selectedFontSize: 18,
+        fontSize: 16,
+        selectedFontSize: 16,
         fontFamily: 'Inter-SemiBold'
       }
     });
