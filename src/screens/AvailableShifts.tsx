@@ -1,13 +1,50 @@
-import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, StyleSheet, Text, View, SectionList } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
+interface IShift {
+  id: string,
+  area: string,
+  booked: boolean,
+  startTime: number,
+  endTime: number
+}
+
 const AvailableShifts: React.FC = () => {
+  let [shiftData, setShiftData] = useState<IShift[]>([]);
+  useEffect(() => {
+    let didCancel = false;
+  
+    // Starting with this: https://github.com/facebook/react/issues/14326#issuecomment-472043812
+    async function fetchMyAPI() {
+      let url = 'http://127.0.0.1:8080/shifts';
+      const response = await fetch(url);
+      const json = await response.json();
+      if (!didCancel) { // Ignore if we started fetching something else
+        console.warn(json);
+        setShiftData(json);
+      }
+    }  
+  
+    fetchMyAPI();
+    return () => { didCancel = true; }; // Remember if we start fetching something else
+  }, []);
+
   return (
     <SafeAreaView>
       <View style={styles.body}>
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>AvailableShifts screen</Text>
+          <SectionList
+            renderItem={({item, index, section}) => <Text key={index}>{item.one + ' ' + item.two}</Text>}
+            renderSectionHeader={({section: {title}}) => (
+              <Text style={{fontWeight: 'bold'}}>{title}</Text>
+            )}
+            sections={[
+              {title: 'Title1', data: [{one: '1one', two: '1two'}, {one: '2one', two: '2two'}]},
+            ]}
+            keyExtractor={(item, index) => item + index}
+          />
         </View>
       </View>
     </SafeAreaView>
