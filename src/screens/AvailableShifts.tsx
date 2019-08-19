@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, SectionList } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, SectionList, ActivityIndicator } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 interface IShift {
@@ -10,8 +10,14 @@ interface IShift {
   endTime: number
 }
 
+// Will eventually need a pqueue instead of an array
+// Maybe this? https://github.com/mourner/tinyqueue
+interface IShiftMap { [s: string]: IShift[] }
+
 const AvailableShifts: React.FC = () => {
-  let [shiftData, setShiftData] = useState<IShift[]>([]);
+  let [shiftData, setShiftData] = useState<IShiftMap>({});
+  let [dates, setDates] = useState<string[]>([]);
+  let [refreshing, setRefreshing] = useState(true);
   useEffect(() => {
     let didCancel = false;
   
@@ -21,8 +27,37 @@ const AvailableShifts: React.FC = () => {
       const response = await fetch(url);
       const json = await response.json();
       if (!didCancel) { // Ignore if we started fetching something else
-        console.warn(json);
-        setShiftData(json);
+        let shiftsCopy: IShiftMap = {};
+        let datesCopy: string[] = [];
+        const todayDateStr = _getFullDateStr(new Date());
+
+        // const groupByDay = (value: IShift) => {
+        //   let start = new Date(value.startTime);
+        //   let d = _getDateKey(start);
+        //   shiftsCopy[d] = shiftsCopy[d] || [];
+        //   shiftsCopy[d].push(value);
+        //   datesCopy.push(d);
+        // };
+        // json.map(groupByDay);
+        
+        for (const shift of json) {
+          const dateKey = _getFullDateStr(new Date(shift.startTime));
+          // If the date on the shift is before today then there's nothing the user
+          // can do with the shift, so don't display it
+          if (dateKey < todayDateStr) {
+            continue;
+          }
+          if (shiftsCopy.hasOwnProperty(dateKey)) {
+            shiftsCopy[dateKey].push(shift);
+          } else {
+            shiftsCopy[dateKey] = [shift];
+            datesCopy.push(dateKey);
+          }
+        }
+        datesCopy.sort();
+        setDates(datesCopy);
+        setShiftData(shiftsCopy);
+        setRefreshing(false);
       }
     }  
   
@@ -30,21 +65,56 @@ const AvailableShifts: React.FC = () => {
     return () => { didCancel = true; }; // Remember if we start fetching something else
   }, []);
 
+  const _getFullDateStr = (d: Date) => {
+    return d.getMonth().toString() + d.getDay().toString() + d.getFullYear().toString();
+  };
+
+  const _createSections = () => {
+    let sections = [];
+    for (const date of dates) {
+      sections.push({
+        title: _dateTitle(new Date(shiftData[date][0].startTime)),
+        data: shiftData[date]
+      });
+    }
+    return sections;
+  };
+
+  const isSameDay = (d1: Date, d2: Date): boolean => {
+    return d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate();
+  }
+
+  const _dateTitle = (d: Date): string => {
+    const today = new Date();
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    let ret = '';
+    if (isSameDay(today, d)) {
+      ret = 'Today';
+    } else if (isSameDay(tomorrow, d)) {
+      ret = 'Tomorrow';
+    } else {
+      ret = d.toDateString();
+    }
+    return ret;
+  };
+  // TODO: Need to set background color to the section header
+  // https://github.com/saleel/react-native-super-grid/issues/60#issuecomment-417782829
+
   return (
     <SafeAreaView>
       <View style={styles.body}>
         <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>AvailableShifts screen</Text>
-          <SectionList
-            renderItem={({item, index, section}) => <Text key={index}>{item.one + ' ' + item.two}</Text>}
+          {refreshing ? <ActivityIndicator size="large" color="#0000ff" /> : <SectionList
+            renderItem={({item}) => <Text key={item.id}>{`Area: ${item.area} ID: ${item.id} Booked?: ${item.booked}`}</Text>}
             renderSectionHeader={({section: {title}}) => (
-              <Text style={{fontWeight: 'bold'}}>{title}</Text>
+              <Text style={{fontWeight: 'bold', backgroundColor: Colors.lighter}}>{title}</Text>
             )}
-            sections={[
-              {title: 'Title1', data: [{one: '1one', two: '1two'}, {one: '2one', two: '2two'}]},
-            ]}
-            keyExtractor={(item, index) => item + index}
-          />
+            sections={_createSections()}
+            keyExtractor={(item) => item.id}
+          />}
         </View>
       </View>
     </SafeAreaView>
