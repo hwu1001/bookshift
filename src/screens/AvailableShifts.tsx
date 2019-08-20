@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, SectionList, ActivityIndicator } from 'react-native';
+import SectionHeader from '../components/SectionHeader';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 interface IShift {
@@ -107,14 +108,16 @@ const AvailableShifts: React.FC = () => {
     <SafeAreaView>
       <View style={styles.body}>
         <View style={styles.sectionContainer}>
-          {refreshing ? <ActivityIndicator size="large" color="#0000ff" /> : <SectionList
+          {refreshing ? <ActivityIndicator size="large" color="#0000ff" />
+          : <SectionList
             renderItem={({item}) => <Text key={item.id}>{`Area: ${item.area} ID: ${item.id} Booked?: ${item.booked}`}</Text>}
             renderSectionHeader={({section: {title}}) => (
-              <Text style={{fontWeight: 'bold', backgroundColor: Colors.lighter}}>{title}</Text>
+              <SectionHeader title={title} numShifts={2} totalTime={4}/>
             )}
             sections={_createSections()}
             keyExtractor={(item) => item.id}
-          />}
+          />
+          }
         </View>
       </View>
     </SafeAreaView>
@@ -130,11 +133,10 @@ const styles = StyleSheet.create({
     right: 0,
   },
   body: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.white
   },
   sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+    marginTop: 32
   },
   sectionTitle: {
     fontSize: 24,
