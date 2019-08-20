@@ -31,8 +31,13 @@ const main = () => {
         titleDisplayMode: 'alwaysShow'
       },
       bottomTab: {
-        textColor: '#CBD2E1',
-        selectedTextColor: '#004FB4',
+        // These colors are not in the palette, but it's much
+        // closer to the design spec than the ones listed.
+        // Previously had from the spec colors:
+        // textColor: '#CBD2E1',
+        // selectedTextColor: '#004FB4',
+        textColor: '#9e9e9e',
+        selectedTextColor: '#277ff7',
         fontSize: 16,
         selectedFontSize: 16,
         fontFamily: 'Inter-SemiBold'
