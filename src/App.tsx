@@ -22,13 +22,15 @@ const main = () => {
   Navigation.events().registerAppLaunchedListener(() => {
     Navigation.setDefaultOptions({
       statusBar: {
-        style: 'dark'
+        style: 'light',
+        visible: true
       },
       layout: {
         direction: 'ltr'
       },
       bottomTabs: {
-        titleDisplayMode: 'alwaysShow'
+        titleDisplayMode: 'alwaysShow',
+        backgroundColor: '#F7F8FB'
       },
       bottomTab: {
         // These colors are not in the palette, but it's much
