@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, SectionList, ActivityIndicator } from 'react-native';
 import SectionHeader from '../components/SectionHeader';
+import SectionItem from '../components/SectionItem';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 interface IShift {
@@ -106,14 +107,20 @@ const AvailableShifts: React.FC = () => {
     }
     return ret;
   };
+
+  const _hourDisplay = (d: Date): string => {
+    return d.getHours().toString();
+  }
   // TODO: Need to set background color to the section header
   // https://github.com/saleel/react-native-super-grid/issues/60#issuecomment-417782829
 
+  // <Text key={item.id}>{`Area: ${item.area} ID: ${item.id} Booked?: ${item.booked}`}</Text>
+  // <SectionItem key={item.id} startHour={_hourDisplay(new Date(item.startTime))} endHour={_hourDisplay(new Date(item.endTime))} area={item.area} />
   return (
     <SafeAreaView style={styles.body}>
       {refreshing ? <ActivityIndicator size="large" color="#0000ff" />
       : <SectionList
-        renderItem={({item}) => <Text key={item.id}>{`Area: ${item.area} ID: ${item.id} Booked?: ${item.booked}`}</Text>}
+        renderItem={({item}) => <SectionItem key={item.id} startHour={_hourDisplay(new Date(item.startTime))} endHour={_hourDisplay(new Date(item.endTime))} area={item.area} />}
         renderSectionHeader={({section: {title}}) => (
           <SectionHeader title={title} numShifts={2} totalTime={4}/>
         )}
