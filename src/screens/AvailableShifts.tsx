@@ -25,41 +25,46 @@ const AvailableShifts: React.FC = () => {
     // Starting with this: https://github.com/facebook/react/issues/14326#issuecomment-472043812
     async function fetchMyAPI() {
       let url = 'http://127.0.0.1:8080/shifts';
-      const response = await fetch(url);
-      const json = await response.json();
-      if (!didCancel) { // Ignore if we started fetching something else
-        let shiftsCopy: IShiftMap = {};
-        let datesCopy: string[] = [];
-        const todayDateStr = _getFullDateStr(new Date());
+      try {
+        const response = await fetch(url);
+        const json = await response.json(); 
+        if (!didCancel) { // Ignore if we started fetching something else
+          let shiftsCopy: IShiftMap = {};
+          let datesCopy: string[] = [];
+          const todayDateStr = _getFullDateStr(new Date());
 
-        // const groupByDay = (value: IShift) => {
-        //   let start = new Date(value.startTime);
-        //   let d = _getDateKey(start);
-        //   shiftsCopy[d] = shiftsCopy[d] || [];
-        //   shiftsCopy[d].push(value);
-        //   datesCopy.push(d);
-        // };
-        // json.map(groupByDay);
-        
-        for (const shift of json) {
-          const dateKey = _getFullDateStr(new Date(shift.startTime));
-          // If the date on the shift is before today then there's nothing the user
-          // can do with the shift, so don't display it
-          if (dateKey < todayDateStr) {
-            continue;
+          // const groupByDay = (value: IShift) => {
+          //   let start = new Date(value.startTime);
+          //   let d = _getDateKey(start);
+          //   shiftsCopy[d] = shiftsCopy[d] || [];
+          //   shiftsCopy[d].push(value);
+          //   datesCopy.push(d);
+          // };
+          // json.map(groupByDay);
+          
+          for (const shift of json) {
+            const dateKey = _getFullDateStr(new Date(shift.startTime));
+            // If the date on the shift is before today then there's nothing the user
+            // can do with the shift, so don't display it
+            if (dateKey < todayDateStr) {
+              continue;
+            }
+            if (shiftsCopy.hasOwnProperty(dateKey)) {
+              shiftsCopy[dateKey].push(shift);
+            } else {
+              shiftsCopy[dateKey] = [shift];
+              datesCopy.push(dateKey);
+            }
           }
-          if (shiftsCopy.hasOwnProperty(dateKey)) {
-            shiftsCopy[dateKey].push(shift);
-          } else {
-            shiftsCopy[dateKey] = [shift];
-            datesCopy.push(dateKey);
-          }
+          datesCopy.sort();
+          setDates(datesCopy);
+          setShiftData(shiftsCopy);
+          setRefreshing(false);
         }
-        datesCopy.sort();
-        setDates(datesCopy);
-        setShiftData(shiftsCopy);
-        setRefreshing(false);
+      } catch (error) {
+        console.warn(error);
       }
+      
     }  
   
     fetchMyAPI();
@@ -97,7 +102,7 @@ const AvailableShifts: React.FC = () => {
     } else if (isSameDay(tomorrow, d)) {
       ret = 'Tomorrow';
     } else {
-      ret = d.toDateString();
+      ret = d.toLocaleDateString('en-US', { month: 'long', day: '2-digit' });
     }
     return ret;
   };
@@ -105,21 +110,17 @@ const AvailableShifts: React.FC = () => {
   // https://github.com/saleel/react-native-super-grid/issues/60#issuecomment-417782829
 
   return (
-    <SafeAreaView>
-      <View style={styles.body}>
-        <View style={styles.sectionContainer}>
-          {refreshing ? <ActivityIndicator size="large" color="#0000ff" />
-          : <SectionList
-            renderItem={({item}) => <Text key={item.id}>{`Area: ${item.area} ID: ${item.id} Booked?: ${item.booked}`}</Text>}
-            renderSectionHeader={({section: {title}}) => (
-              <SectionHeader title={title} numShifts={2} totalTime={4}/>
-            )}
-            sections={_createSections()}
-            keyExtractor={(item) => item.id}
-          />
-          }
-        </View>
-      </View>
+    <SafeAreaView style={styles.body}>
+      {refreshing ? <ActivityIndicator size="large" color="#0000ff" />
+      : <SectionList
+        renderItem={({item}) => <Text key={item.id}>{`Area: ${item.area} ID: ${item.id} Booked?: ${item.booked}`}</Text>}
+        renderSectionHeader={({section: {title}}) => (
+          <SectionHeader title={title} numShifts={2} totalTime={4}/>
+        )}
+        sections={_createSections()}
+        keyExtractor={(item) => item.id}
+      />
+      }
     </SafeAreaView>
   );
 }
@@ -133,7 +134,8 @@ const styles = StyleSheet.create({
     right: 0,
   },
   body: {
-    backgroundColor: Colors.white
+    backgroundColor: Colors.white,
+    flex: 1
   },
   sectionContainer: {
     marginTop: 32
