@@ -11,6 +11,7 @@
     "clean-ios": "rm -rf ios/build/"
   },
   "dependencies": {
+    "moment": "^2.24.0",
     "react": "16.8.6",
     "react-native": "0.60.5",
     "react-native-navigation": "^3.0.0"

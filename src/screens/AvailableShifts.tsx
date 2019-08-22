@@ -3,6 +3,7 @@ import { SafeAreaView, StyleSheet, Text, View, SectionList, ActivityIndicator } 
 import SectionHeader from '../components/SectionHeader';
 import SectionItem from '../components/SectionItem';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+const moment = require('moment'); // this import is to avoid a TS compilation import error
 
 interface IShift {
   id: string,
@@ -103,7 +104,11 @@ const AvailableShifts: React.FC = () => {
     } else if (isSameDay(tomorrow, d)) {
       ret = 'Tomorrow';
     } else {
-      ret = d.toLocaleDateString('en-US', { month: 'long', day: '2-digit' });
+      // The following doesn't work on Android with JavaScript Core engine
+      // See: https://stackoverflow.com/a/51400372
+      // ret = d.toLocaleDateString('en-US', { month: 'long', day: '2-digit' });
+      // So using moment
+      ret = moment(d).format('MMMM DD');
     }
     return ret;
   };
