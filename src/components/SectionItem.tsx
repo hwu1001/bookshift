@@ -15,7 +15,7 @@ const SectionItem: React.FC<ISectionItem> = (props: ISectionItem) => {
     <View style={styles.sectionView}>
       <View style={styles.viewContainer}>
         <Text style={styles.hourText}>{`${startHour}:00-${endHour}:00`}</Text>
-        <Text style={styles.areaText}>{area}</Text>
+        {area && <Text style={styles.areaText}>{area}</Text>}
       </View>
     </View>
   );
@@ -24,14 +24,14 @@ const SectionItem: React.FC<ISectionItem> = (props: ISectionItem) => {
 const styles = StyleSheet.create({
   sectionView: {
     flexDirection: 'row',
-    backgroundColor: '#F7F8FB',
+    backgroundColor: '#ffffff',
     borderTopWidth: 0.5,
     borderBottomWidth: 0.5,
     borderColor: '#CBD2E1'
   },
   viewContainer: {
     justifyContent: 'center',
-    paddingVertical: 10,
+    paddingVertical: 14,
     marginLeft: '5%',
     marginRight: '5%'
     
@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
   hourText: {
     color: '#4F6C92',
     fontFamily: 'Inter-Medium',
-    fontSize: 16
+    fontSize: 16,
+    fontWeight: '500'
   },
   areaText: {
     color: '#A4B8D3',
