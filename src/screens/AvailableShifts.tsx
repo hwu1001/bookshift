@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, SectionList, ActivityIndicator } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, SectionList, ActivityIndicator, FlatList } from 'react-native';
 import SectionHeader from '../components/SectionHeader';
 import SectionItem from '../components/SectionItem';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-const moment = require('moment'); // this import is to avoid a TS compilation import error
+import moment from 'moment';
 
 interface IShift {
   id: string,
@@ -17,8 +17,13 @@ interface IShift {
 // Maybe this? https://github.com/mourner/tinyqueue
 interface IShiftMap { [s: string]: IShift[] }
 
+interface ICityOrderCount {
+  [s: string]: number
+};
+
 const AvailableShifts: React.FC = () => {
   let [shiftData, setShiftData] = useState<IShiftMap>({});
+  let [cityOrderCount, setCityOrderCount] = useState<ICityOrderCount>({});
   let [dates, setDates] = useState<string[]>([]);
   let [refreshing, setRefreshing] = useState(true);
   useEffect(() => {
@@ -33,6 +38,7 @@ const AvailableShifts: React.FC = () => {
         if (!didCancel) { // Ignore if we started fetching something else
           let shiftsCopy: IShiftMap = {};
           let datesCopy: string[] = [];
+          let cityCopy: ICityOrderCount = {};
           const todayDateStr = _getFullDateStr(new Date());
 
           // const groupByDay = (value: IShift) => {
@@ -51,6 +57,14 @@ const AvailableShifts: React.FC = () => {
             if (dateKey < todayDateStr) {
               continue;
             }
+
+            if (!cityCopy.hasOwnProperty(shift.area)) {
+              cityCopy[shift.area] = 1;
+              cityCopy.id
+            } else {
+              cityCopy[shift.area] += 1;
+            }
+
             if (shiftsCopy.hasOwnProperty(dateKey)) {
               shiftsCopy[dateKey].push(shift);
             } else {
@@ -61,6 +75,7 @@ const AvailableShifts: React.FC = () => {
           datesCopy.sort();
           setDates(datesCopy);
           setShiftData(shiftsCopy);
+          setCityOrderCount(cityCopy);
           setRefreshing(false);
         }
       } catch (error) {
@@ -113,9 +128,23 @@ const AvailableShifts: React.FC = () => {
     return ret;
   };
 
+  const _cityCountData = () => {
+    const ordered = Object.keys(cityOrderCount).sort();
+    let ret = [];
+    for (const iterator of ordered) {
+      let temp: { [s: string]: number} = { };
+      temp[iterator] = cityOrderCount[iterator];
+      ret.push(temp);
+    }
+    return ret;
+  };
+
+  const _keyExtractor = (item: ICityOrderCount, index: number) => index.toString();
+
   const _hourDisplay = (d: Date): string => {
     return d.getHours().toString();
   }
+  // console.warn(_cityCountData());
   // TODO: Need to set background color to the section header
   // https://github.com/saleel/react-native-super-grid/issues/60#issuecomment-417782829
 
@@ -123,8 +152,16 @@ const AvailableShifts: React.FC = () => {
   // <SectionItem key={item.id} startHour={_hourDisplay(new Date(item.startTime))} endHour={_hourDisplay(new Date(item.endTime))} area={item.area} />
   return (
     <SafeAreaView style={styles.body}>
-      {refreshing ? <ActivityIndicator size="large" color="#0000ff" />
-      : <SectionList
+      {refreshing ?
+      <ActivityIndicator size="large" color="#0000ff" /> :
+      <>
+        <FlatList
+        data={_cityCountData()}
+        renderItem={({item, index}) => <Text>{`${Object.keys(item)[0]} (${item[Object.keys(item)[0]]})`}</Text>}
+        horizontal={true}
+        keyExtractor={_keyExtractor}
+      />
+      <SectionList
         renderItem={({item}) => <SectionItem key={item.id} startHour={_hourDisplay(new Date(item.startTime))} endHour={_hourDisplay(new Date(item.endTime))} area={item.area} />}
         renderSectionHeader={({section: {title}}) => (
           <SectionHeader title={title} numShifts={2} totalTime={4}/>
@@ -132,6 +169,7 @@ const AvailableShifts: React.FC = () => {
         sections={_createSections()}
         keyExtractor={(item) => item.id}
       />
+      </>
       }
     </SafeAreaView>
   );
