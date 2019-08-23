@@ -17,13 +17,17 @@ interface IShift {
 // Maybe this? https://github.com/mourner/tinyqueue
 interface IShiftMap { [s: string]: IShift[] }
 
-interface ICityOrderCount {
-  [s: string]: number
-};
+interface ICityCount {
+  id: string,
+  area: string,
+  count: number
+}
+
+interface ICityCountMap { [s: string]: ICityCount };
 
 const AvailableShifts: React.FC = () => {
   let [shiftData, setShiftData] = useState<IShiftMap>({});
-  let [cityOrderCount, setCityOrderCount] = useState<ICityOrderCount>({});
+  let [cityOrderCount, setCityOrderCount] = useState<ICityCount[]>([]);
   let [dates, setDates] = useState<string[]>([]);
   let [refreshing, setRefreshing] = useState(true);
   useEffect(() => {
@@ -38,8 +42,9 @@ const AvailableShifts: React.FC = () => {
         if (!didCancel) { // Ignore if we started fetching something else
           let shiftsCopy: IShiftMap = {};
           let datesCopy: string[] = [];
-          let cityCopy: ICityOrderCount = {};
+          let cityCopy: ICityCountMap = {};
           const todayDateStr = _getFullDateStr(new Date());
+          // console.warn(`today: ${todayDateStr}`);
 
           // const groupByDay = (value: IShift) => {
           //   let start = new Date(value.startTime);
@@ -49,9 +54,9 @@ const AvailableShifts: React.FC = () => {
           //   datesCopy.push(d);
           // };
           // json.map(groupByDay);
-          
           for (const shift of json) {
             const dateKey = _getFullDateStr(new Date(shift.startTime));
+            // console.warn(`dateKey: ${dateKey}`);
             // If the date on the shift is before today then there's nothing the user
             // can do with the shift, so don't display it
             if (dateKey < todayDateStr) {
@@ -59,10 +64,13 @@ const AvailableShifts: React.FC = () => {
             }
 
             if (!cityCopy.hasOwnProperty(shift.area)) {
-              cityCopy[shift.area] = 1;
-              cityCopy.id
+              cityCopy[shift.area] = {
+                id: shift.area,
+                area: shift.area,
+                count: 1
+              };
             } else {
-              cityCopy[shift.area] += 1;
+              cityCopy[shift.area].count += 1;
             }
 
             if (shiftsCopy.hasOwnProperty(dateKey)) {
@@ -73,9 +81,11 @@ const AvailableShifts: React.FC = () => {
             }
           }
           datesCopy.sort();
+          // Sort the areas in alphabetical order for display
+          const cityMapCopy = Object.keys(cityCopy).sort().map((elem) => cityCopy[elem]);
           setDates(datesCopy);
           setShiftData(shiftsCopy);
-          setCityOrderCount(cityCopy);
+          setCityOrderCount(cityMapCopy);
           setRefreshing(false);
         }
       } catch (error) {
@@ -89,7 +99,7 @@ const AvailableShifts: React.FC = () => {
   }, []);
 
   const _getFullDateStr = (d: Date) => {
-    return d.getMonth().toString() + d.getDay().toString() + d.getFullYear().toString();
+    return moment(d).format('MMDDYYYY');
   };
 
   const _createSections = () => {
@@ -128,18 +138,7 @@ const AvailableShifts: React.FC = () => {
     return ret;
   };
 
-  const _cityCountData = () => {
-    const ordered = Object.keys(cityOrderCount).sort();
-    let ret = [];
-    for (const iterator of ordered) {
-      let temp: { [s: string]: number} = { };
-      temp[iterator] = cityOrderCount[iterator];
-      ret.push(temp);
-    }
-    return ret;
-  };
-
-  const _keyExtractor = (item: ICityOrderCount, index: number) => index.toString();
+  const _keyExtractor = (item: ICityCount) => item.id;
 
   const _hourDisplay = (d: Date): string => {
     return d.getHours().toString();
@@ -156,8 +155,8 @@ const AvailableShifts: React.FC = () => {
       <ActivityIndicator size="large" color="#0000ff" /> :
       <>
         <FlatList
-        data={_cityCountData()}
-        renderItem={({item, index}) => <Text>{`${Object.keys(item)[0]} (${item[Object.keys(item)[0]]})`}</Text>}
+        data={cityOrderCount}
+        renderItem={({item}) => <Text>{`${item.area} (${item.count})`}</Text>}
         horizontal={true}
         keyExtractor={_keyExtractor}
       />
