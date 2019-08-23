@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, SectionList, ActivityIndicator, FlatList } from 'react-native';
 import SectionHeader from '../components/SectionHeader';
 import SectionItem from '../components/SectionItem';
+import AreaFilter from '../components/AreaFilter';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import moment from 'moment';
 
@@ -143,6 +144,10 @@ const AvailableShifts: React.FC = () => {
   const _hourDisplay = (d: Date): string => {
     return d.getHours().toString();
   }
+
+  const _filterCb = () => {
+    console.warn('clicked area filter');
+  };
   // console.warn(_cityCountData());
   // TODO: Need to set background color to the section header
   // https://github.com/saleel/react-native-super-grid/issues/60#issuecomment-417782829
@@ -156,9 +161,10 @@ const AvailableShifts: React.FC = () => {
       <>
         <FlatList
         data={cityOrderCount}
-        renderItem={({item}) => <Text>{`${item.area} (${item.count})`}</Text>}
+        renderItem={({item}) => <AreaFilter area={item.area} orderCounter={item.count} filterCb={_filterCb} />}
         horizontal={true}
         keyExtractor={_keyExtractor}
+        contentContainerStyle={styles.flatList}
       />
       <SectionList
         renderItem={({item}) => <SectionItem key={item.id} startHour={_hourDisplay(new Date(item.startTime))} endHour={_hourDisplay(new Date(item.endTime))} area={item.area} />}
@@ -211,6 +217,11 @@ const styles = StyleSheet.create({
     paddingRight: 12,
     textAlign: 'right',
   },
+  flatList: {
+    flexDirection: 'row',
+    backgroundColor: '#ffffff',
+    flex: 1
+  }
 });
 
 export default AvailableShifts;
