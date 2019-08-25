@@ -15,9 +15,6 @@ const main = () => {
   // Icons are required on Android because of the Android library React Native Navigation
   // uses. They are not required on iOS.
   // See: https://github.com/wix/react-native-navigation/issues/4684
-  const icon = Platform.select({
-    android: require('./assets/img/file.svg') // This doesn't render on the screen, which is what the spec wants
-  });
   registerScreens();
   Navigation.events().registerAppLaunchedListener(() => {
     Navigation.setDefaultOptions({
@@ -40,6 +37,8 @@ const main = () => {
         // selectedTextColor: '#004FB4',
         textColor: '#9e9e9e',
         selectedTextColor: '#277ff7',
+        iconColor: '#9e9e9e',
+        selectedIconColor: '#277ff7',
         fontSize: 16,
         selectedFontSize: 16,
         fontFamily: 'Inter-SemiBold'
@@ -55,7 +54,7 @@ const main = () => {
                 options: {
                   bottomTab: {
                     text: 'My shifts',
-                    icon: icon
+                    icon: require('./assets/img/menu.png')
                   }
                 }
               }
@@ -66,7 +65,7 @@ const main = () => {
                 options: {
                   bottomTab: {
                     text: 'Available shifts',
-                    icon: icon
+                    icon: require('./assets/img/navicon_add.png')
                   }
                 }
               }
