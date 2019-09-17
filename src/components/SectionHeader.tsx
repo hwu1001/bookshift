@@ -9,13 +9,13 @@ interface ISectionHeader {
 
 const SectionHeader: React.FC<ISectionHeader> = (props: ISectionHeader) => {
   const { title, numShifts, totalTime } = props;
-  const shift = (numShifts && numShifts > 1) ? 'shifts' : 'shift';
+  const shiftStr = (numShifts && numShifts > 1) ? 'shifts' : 'shift';
   return (
     <View style={styles.sectionView}>
       <Text style={styles.title}>{title}</Text>
       {numShifts &&
        totalTime &&
-       <Text style={styles.shiftDuration}>{`${numShifts} ${shift}, ${totalTime} h`}</Text>}
+       <Text style={styles.shiftDuration}>{`${numShifts.toString()} ${shiftStr}, ${totalTime.toString()} h`}</Text>}
     </View>
   );
 }
