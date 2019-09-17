@@ -7,13 +7,12 @@
  *
  * @format
  */
-import { Platform } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { registerScreens, Screens } from './screens';
 
 const main = () => {
   // Icons are required on Android because of the Android library React Native Navigation
-  // uses. They are not required on iOS.
+  // uses. They are not required on iOS, but the spacing on the text is usually off without them.
   // See: https://github.com/wix/react-native-navigation/issues/4684
   registerScreens();
   Navigation.events().registerAppLaunchedListener(() => {
