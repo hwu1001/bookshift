@@ -13,7 +13,7 @@ interface IAvailableShifts {
   loading: boolean,
   areaFilterProps: {
     data: ReadonlyArray<ICityCount>,
-    filterCb: () => void
+    filterCb: (area: string) => void
   },
   shiftListProps: IShiftsProps
 }
@@ -52,7 +52,9 @@ const styles = StyleSheet.create({
   areaFilter: {
     flexDirection: 'row',
     backgroundColor: '#ffffff',
-    flex: 1
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 });
 

@@ -24,16 +24,17 @@ const AvailableShiftsContainer: React.FC<AvailableShiftsContainerProps> = ({ loa
   let [shiftData, setShiftData] = useState<IShiftDateMap>({});
   let [cityOrderCount, setCityOrderCount] = useState<ICityCount[]>([]);
   let [dates, setDates] = useState<string[]>([]);
-  let [dispatched, setDispatched] = useState(false);
+  let [currentArea, setCurrentArea] = useState<string>('');
 
   useEffect(() => {
-    if (Object.keys(shifts).length > 0) {
+    fetchShifts();
+  }, []);
+
+  useEffect(() => {
+    if (!loading) {
       _setLocalState(shifts);
-    } else if (!dispatched) {
-      fetchShifts();
-      setDispatched(true);
     }
-  }, [shifts]);
+  }, [loading]);
 
   const _setLocalState = (shifts: stateTypes.ShiftMap) => {
     if (Object.keys(shifts).length < 1) {
@@ -43,6 +44,7 @@ const AvailableShiftsContainer: React.FC<AvailableShiftsContainerProps> = ({ loa
     let shiftsCopy: IShiftDateMap= {};
     let datesCopy: string[] = [];
     let cityCopy: ICityCountMap = {};
+    let curArea = '';
     for (const shiftId in shifts) {
       const shift = shifts[shiftId];
       const dateKey = _getFullDateStr(new Date(shift.startTime));
@@ -52,6 +54,9 @@ const AvailableShiftsContainer: React.FC<AvailableShiftsContainerProps> = ({ loa
         continue;
       }
 
+      if (curArea === '' || shift.area < curArea) {
+        curArea = shift.area;
+      }
       if (!cityCopy.hasOwnProperty(shift.area)) {
         cityCopy[shift.area] = {
           id: shift.area,
@@ -75,14 +80,19 @@ const AvailableShiftsContainer: React.FC<AvailableShiftsContainerProps> = ({ loa
     setDates(datesCopy);
     setShiftData(shiftsCopy);
     setCityOrderCount(cityMapCopy);
+    setCurrentArea(curArea);
   };
   
   const _createSections = () => {
     let sections = [];
     for (const date of dates) {
+      const filteredShiftData = shiftData[date].filter(shift => shift.area === currentArea);
+      if (filteredShiftData.length < 1) {
+        continue;
+      }
       sections.push({
         title: _dateTitle(new Date(shiftData[date][0].startTime)),
-        data: shiftData[date]
+        data: filteredShiftData
       });
     }
     return sections;
@@ -117,16 +127,14 @@ const AvailableShiftsContainer: React.FC<AvailableShiftsContainerProps> = ({ loa
       d1.getDate() === d2.getDate();
   };
 
-  const _filterCb = () => {
-    console.warn('clicked area filter');
+  const _filterArea = (area: string) => {
+    setCurrentArea(area);
   };
- 
-  console.warn('dispatched', dispatched);
 
   return (
     <AvailableShifts
       loading={loading}
-      areaFilterProps={{ data: cityOrderCount,  filterCb: _filterCb}}
+      areaFilterProps={{ data: cityOrderCount,  filterCb: _filterArea}}
       shiftListProps={{ sections: _createSections() }}
     />
   )
