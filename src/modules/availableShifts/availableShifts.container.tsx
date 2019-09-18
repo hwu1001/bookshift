@@ -48,11 +48,6 @@ const AvailableShiftsContainer: React.FC<AvailableShiftsContainerProps> = ({ loa
     for (const shiftId in shifts) {
       const shift = shifts[shiftId];
       const dateKey = _getFullDateStr(new Date(shift.startTime));
-      // If the date on the shift is before today then there's nothing the user
-      // can do with the shift, so don't display it
-      if (dateKey < todayDateStr) {
-        continue;
-      }
 
       if (curArea === '' || shift.area < curArea) {
         curArea = shift.area;
