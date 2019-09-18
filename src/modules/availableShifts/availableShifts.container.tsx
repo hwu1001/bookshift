@@ -14,7 +14,8 @@ interface IShiftDateMap { [date: string]: stateTypes.Shift[] }
 interface ICityCount {
   id: string,
   area: string,
-  count: number
+  count: number,
+  active: boolean
 }
 
 // 
@@ -56,7 +57,8 @@ const AvailableShiftsContainer: React.FC<AvailableShiftsContainerProps> = ({ loa
         cityCopy[shift.area] = {
           id: shift.area,
           area: shift.area,
-          count: 1
+          count: 1,
+          active: true
         };
       } else {
         cityCopy[shift.area].count += 1;
@@ -71,7 +73,12 @@ const AvailableShiftsContainer: React.FC<AvailableShiftsContainerProps> = ({ loa
     }
     datesCopy.sort();
     // Sort the areas in alphabetical order for display
-    const cityMapCopy = Object.keys(cityCopy).sort().map((elem) => cityCopy[elem]);
+    const cityMapCopy = Object.keys(cityCopy).sort().map((elem) => {
+      return ({
+        ...cityCopy[elem],
+        active: curArea === elem
+      });
+    });
     setDates(datesCopy);
     setShiftData(shiftsCopy);
     setCityOrderCount(cityMapCopy);
@@ -124,6 +131,12 @@ const AvailableShiftsContainer: React.FC<AvailableShiftsContainerProps> = ({ loa
 
   const _filterArea = (area: string) => {
     setCurrentArea(area);
+    setCityOrderCount(cityOrderCount.map(city => {
+      return({
+        ...city,
+        active: city.area === area
+      });
+    }));
   };
 
   return (

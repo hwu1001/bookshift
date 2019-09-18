@@ -6,7 +6,8 @@ import Shifts, { IShiftsProps } from '../core/shifts/Shifts.component';
 export interface ICityCount {
   id: string,
   area: string,
-  count: number
+  count: number,
+  active: boolean
 }
 
 interface IAvailableShifts {
@@ -30,7 +31,7 @@ const AvailableShifts: React.FC<IAvailableShifts> = (props: IAvailableShifts) =>
         <>
           <FlatList
             data={areaFilterProps.data}
-            renderItem={({item}) => <AreaFilterItem area={item.area} orderCounter={item.count} filterCb={areaFilterProps.filterCb} />}
+            renderItem={({item}) => <AreaFilterItem area={item.area} orderCounter={item.count} filterCb={areaFilterProps.filterCb} active={item.active} />}
             horizontal={true}
             keyExtractor={_areaKeyExtractor}
             contentContainerStyle={styles.areaFilter}
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   }
 });
 

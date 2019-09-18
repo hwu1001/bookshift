@@ -4,18 +4,21 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 interface IAreaFilterItem {
   area: string,
   orderCounter: number,
-  filterCb: (area: string) => void
+  filterCb: (area: string) => void,
+  active: boolean
 }
 
 const AreaFilterItem: React.FC<IAreaFilterItem> = (props: IAreaFilterItem) => {
-  const { area, orderCounter, filterCb } = props;
+  const { area, orderCounter, filterCb, active } = props;
   const _onFilterPress = () => {
     filterCb(area);
   };
+
+  const curTextStyle = active ? styles.areaTextActive : styles.areaTextInactive;
   return (
     <View style={styles.view}>
       <TouchableOpacity onPress={_onFilterPress}>
-        <Text style={styles.areaText}>{`${area} (${orderCounter.toString()})`}</Text>
+        <Text style={curTextStyle}>{`${area} (${orderCounter.toString()})`}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -24,12 +27,12 @@ const AreaFilterItem: React.FC<IAreaFilterItem> = (props: IAreaFilterItem) => {
 const styles = StyleSheet.create({
   view: {
     flexDirection: 'row', 
-    alignSelf: 'flex-start',
-    paddingVertical: '7%',
-    paddingRight: '4%',
-    paddingLeft: '4%'
+    alignSelf: 'center',
+    paddingVertical: '15%',
+    // paddingRight: '4%',
+    paddingLeft: '5%'
   },
-  areaText: {
+  areaTextActive: {
     color: '#004FB4',
     fontFamily: 'Inter-SemiBold',
     fontSize: 17,
@@ -37,6 +40,11 @@ const styles = StyleSheet.create({
     // paddingHorizontal: '5%'
     // paddingTop: '5%',
     // paddingBottom: '5%'
+  },
+  areaTextInactive: {
+    color: '#CBD2E1',
+    fontFamily: 'Inter-SemiBold',
+    fontSize: 17,
   }
 });
 
