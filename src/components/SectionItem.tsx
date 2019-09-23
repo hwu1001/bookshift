@@ -7,7 +7,7 @@ interface ISectionItem {
   endHour: string,
   area?: string,
   shiftStatus?: string,
-  buttonComponent?: React.FC
+  buttonComponent?: JSX.Element
 }
 
 const SectionItem: React.FC<ISectionItem> = (props: ISectionItem) => {
@@ -18,9 +18,11 @@ const SectionItem: React.FC<ISectionItem> = (props: ISectionItem) => {
         <Text style={styles.hourText}>{`${startHour}:00-${endHour}:00`}</Text>
         {area && <Text style={styles.areaText}>{area}</Text>}
       </View>
-      <View style={styles.buttonContainer}>
-        <PillButton text={'Book'} />
-      </View>
+      {!!buttonComponent && 
+        <View style={styles.buttonContainer}>
+          {buttonComponent}
+        </View>
+      }
     </View>
   );
 }
