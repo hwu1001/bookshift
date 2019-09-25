@@ -21,7 +21,7 @@ const Shifts: React.FC<IShiftsProps> = (props: IShiftsProps) => {
           key={item.id}
           startHour={_hourDisplay(new Date(item.startTime))}
           endHour={_hourDisplay(new Date(item.endTime))}
-          buttonComponent={<PillButton text={'Book'} />}
+          buttonComponent={<PillButton text={'Book'} type='positive' />}
         />
       )}
       renderSectionHeader={({section: {title}}) => (
