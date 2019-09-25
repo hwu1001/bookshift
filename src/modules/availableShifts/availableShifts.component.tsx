@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, ActivityIndicator, FlatList, Text } from 'react-native';
+import { SafeAreaView, StyleSheet, ActivityIndicator, FlatList, View } from 'react-native';
 import AreaFilterItem from '../../components/AreaFilterItem';
 import Shifts, { IShiftsProps } from '../core/shifts/Shifts.component';
 
@@ -29,13 +29,15 @@ const AvailableShifts: React.FC<IAvailableShifts> = (props: IAvailableShifts) =>
       {loading ?
         <ActivityIndicator size="large" color="#0000ff" /> :
         <>
-          <FlatList
-            data={areaFilterProps.data}
-            renderItem={({item}) => <AreaFilterItem area={item.area} orderCounter={item.count} filterCb={areaFilterProps.filterCb} active={item.active} />}
-            horizontal={true}
-            keyExtractor={_areaKeyExtractor}
-            contentContainerStyle={styles.areaFilter}
-          />
+          <View style={styles.view}>
+            <FlatList
+              data={areaFilterProps.data}
+              renderItem={({item}) => <AreaFilterItem area={item.area} orderCounter={item.count} filterCb={areaFilterProps.filterCb} active={item.active} />}
+              horizontal={true}
+              keyExtractor={_areaKeyExtractor}
+              contentContainerStyle={styles.areaFilter}
+            />
+          </View>
           <Shifts
             sections={shiftListProps.sections}
           />
@@ -52,10 +54,13 @@ const styles = StyleSheet.create({
   },
   areaFilter: {
     flexDirection: 'row',
-    backgroundColor: '#ffffff',
     flex: 1,
+    backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  view: { // why does this work? Seems like a hack
+    flex: 0
   }
 });
 
