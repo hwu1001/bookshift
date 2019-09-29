@@ -3,7 +3,11 @@ import { SectionList, SectionListData } from 'react-native';
 import { Shift as IShift } from './shifts.stateTypes';
 import SectionItem from '../../../components/SectionItem';
 import SectionHeader from '../../../components/SectionHeader';
-import PillButton from '../../../components/PillButton';
+import PillButton, { IPillButton } from '../../../components/PillButton';
+
+export interface IShiftSectionItem extends IShift {
+  actionButtonProps: IPillButton
+}
 
 export interface IShiftsProps {
   sections: readonly SectionListData<IShift>[]
@@ -21,7 +25,7 @@ const Shifts: React.FC<IShiftsProps> = (props: IShiftsProps) => {
           key={item.id}
           startHour={_hourDisplay(new Date(item.startTime))}
           endHour={_hourDisplay(new Date(item.endTime))}
-          buttonComponent={<PillButton text={'Book'} type='positive' />}
+          buttonComponent={<PillButton text={'Book'} type='inactive' />}
         />
       )}
       renderSectionHeader={({section: {title}}) => (

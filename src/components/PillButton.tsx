@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 // Based in part off of https://react-native-training.github.io/react-native-elements/docs/button.html
-interface IPillButton {
+export interface IPillButton {
   text: string,
   type: 'positive' | 'negative' | 'inactive'
 }
@@ -16,7 +16,7 @@ const PillButton: React.FC<IPillButton> = (props: IPillButton) => {
 
   return(
     <View style={styles.container}>
-      <TouchableOpacity style={StyleSheet.flatten([styles.button, _getStyleType(type, 'button')])} onPress={_pressCb}>
+      <TouchableOpacity style={StyleSheet.flatten([styles.button, _getStyleType(type, 'button')])} disabled={type === 'inactive'} onPress={_pressCb}>
         <Text style={StyleSheet.flatten([styles.text, _getStyleType(type, 'text')])}>{text}</Text>
       </TouchableOpacity>
     </View>

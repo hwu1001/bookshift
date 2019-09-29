@@ -1,12 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import PillButton from './PillButton';
+import { IPillButton } from './PillButton';
 
 interface ISectionItem {
   startHour: string,
   endHour: string,
   area?: string,
   shiftStatus?: string,
+  buttonProps?: IPillButton,
   buttonComponent?: JSX.Element
 }
 
