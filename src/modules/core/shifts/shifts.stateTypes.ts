@@ -12,3 +12,8 @@ export interface ShiftsState {
   shifts: ShiftMap,
   loading: boolean
 }
+
+export interface SingleShiftState {
+  shift: Shift,
+  loading: boolean
+}

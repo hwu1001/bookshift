@@ -1,5 +1,5 @@
-import { FETCH, RECEIVED, FetchShiftsAction, ReceivedShiftsAction } from './shifts.actionTypes';
-import { ShiftMap } from './shifts.stateTypes';
+import { FETCH, RECEIVED, BOOK, FetchShiftsAction, ReceivedShiftsAction, BookShiftAction } from './shifts.actionTypes';
+import { ShiftMap, Shift } from './shifts.stateTypes';
 
 export const fetchShifts = (): FetchShiftsAction => {
   return {
@@ -20,3 +20,29 @@ export const receiveShifts = (shiftsMap: ShiftMap): ReceivedShiftsAction => {
     }
   }
 }
+
+export const bookShift = (shiftId: string): BookShiftAction => {
+  return {
+    type: BOOK,
+    payload: {
+      loading: true,
+      shift: {
+        id: shiftId,
+        area: "",
+        booked: false,
+        startTime: 0,
+        endTime: 0
+      }
+    }
+  }
+};
+
+export const receiveBookShift = (shift: Shift): BookShiftAction => {
+  return {
+    type: BOOK,
+    payload: {
+      shift: shift,
+      loading: false
+    }
+  }
+};
